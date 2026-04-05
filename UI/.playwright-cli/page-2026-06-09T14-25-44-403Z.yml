@@ -1,0 +1,51 @@
+- generic [ref=e3]:
+  - link "Skip to main content" [ref=e4] [cursor=pointer]:
+    - /url: "#main-content"
+  - navigation "Main navigation" [ref=e5]:
+    - generic [ref=e6]:
+      - button "Go to home" [ref=e8] [cursor=pointer]:
+        - img
+      - navigation [ref=e9]:
+        - generic [ref=e10]:
+          - paragraph [ref=e11]: Main
+          - list [ref=e12]:
+            - listitem [ref=e13]:
+              - button "Projects" [ref=e14] [cursor=pointer]:
+                - img
+                - text: Projects
+            - listitem [ref=e15]:
+              - button "New Project" [ref=e16] [cursor=pointer]:
+                - img
+                - text: New Project
+        - generic [ref=e17]:
+          - paragraph [ref=e18]: WireMock
+          - list [ref=e19]:
+            - listitem [ref=e20]:
+              - button "Logs" [ref=e21] [cursor=pointer]:
+                - img
+                - text: Logs
+            - listitem [ref=e22]:
+              - button "WireMock Stubs" [ref=e23] [cursor=pointer]:
+                - img
+                - text: WireMock Stubs
+            - listitem [ref=e24]:
+              - button "Near Misses" [ref=e25] [cursor=pointer]:
+                - img
+                - text: Near Misses
+            - listitem [ref=e26]:
+              - button "Notifications" [ref=e27] [cursor=pointer]:
+                - img
+                - text: Notifications
+            - listitem [ref=e28]:
+              - button "Settings" [ref=e29] [cursor=pointer]:
+                - img
+                - text: Settings
+      - generic [ref=e30]:
+        - button "Switch to dark mode" [ref=e31] [cursor=pointer]: Switch to dark
+        - generic [ref=e34]: WireMock Connected
+        - generic [ref=e38]:
+          - generic [ref=e39]: WireMate UI v0.1.0
+          - link "View WireMate source on GitHub (opens in a new tab)" [ref=e40] [cursor=pointer]:
+            - /url: https://github.com/mixaverros88/WireMate
+            - img
+  - main

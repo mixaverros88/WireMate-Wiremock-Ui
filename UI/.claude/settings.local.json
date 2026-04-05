@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(netstat -ano)",
+      "Bash(findstr :5173)"
+    ]
+  }
+}

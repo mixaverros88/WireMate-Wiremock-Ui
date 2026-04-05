@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mvn -q -DskipTests compile)",
+      "PowerShell(mvn clean package -q)"
+    ]
+  }
+}

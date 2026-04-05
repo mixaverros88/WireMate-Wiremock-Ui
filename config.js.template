@@ -1,0 +1,4 @@
+window.__APP_CONFIG__ = {
+    WIREMOCK_ADMIN_URL: '${UI_WIREMOCK_ADMIN_URL}',
+    API_BASE_URL: '${API_BASE_URL}',
+}

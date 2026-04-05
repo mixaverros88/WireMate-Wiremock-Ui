@@ -1,0 +1,49 @@
+{
+  "name": "ui",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc -b && vite build",
+    "preview": "vite preview",
+    "typecheck": "vue-tsc -b",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "postinstall": "patch-package"
+  },
+  "dependencies": {
+    "@heroicons/vue": "^2.2.0",
+    "@tailwindcss/vite": "^4.3.3",
+    "chart.js": "^4.5.1",
+    "mgv-backoffice": "^1.37.0",
+    "tailwindcss": "^4.3.3",
+    "vue": "^3.5.43",
+    "vue-chartjs": "^5.3.4",
+    "vue-router": "^5.3.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^26.6.3",
+    "@vitejs/plugin-vue": "^6.0.9",
+    "@vitest/coverage-v8": "^5.0.2",
+    "@vue/eslint-config-prettier": "^10.2.0",
+    "@vue/eslint-config-typescript": "^14.9.0",
+    "@vue/test-utils": "^2.5.1",
+    "@vue/tsconfig": "^0.9.1",
+    "eslint": "^10.11.0",
+    "eslint-plugin-vue": "^10.11.1",
+    "jsdom": "^30.1.1",
+    "patch-package": "^8.0.1",
+    "prettier": "^3.9.9",
+    "typescript": "~6.0.3",
+    "vite": "^8.3.1",
+    "vitest": "^5.0.2",
+    "vue-tsc": "^3.3.11"
+  }
+}

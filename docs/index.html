@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <title>WireMate – Web UI & Dashboard for WireMock</title>
+  <meta name="description" content="WireMate is a free, open-source web UI and dashboard for WireMock. Create, manage, and publish WireMock stubs visually — no handwritten JSON. Organize mocks into projects, inspect request logs, and deploy with Docker." />
+  <link rel="canonical" href="https://mixaverros88.github.io/WireMate/" />
+  <meta name="robots" content="index, follow" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://mixaverros88.github.io/WireMate/" />
+  <meta property="og:title" content="WireMate – Web UI & Dashboard for WireMock" />
+  <meta property="og:description" content="Free, open-source web UI for WireMock. Create, manage, and publish stubs visually — no handwritten JSON." />
+  <meta property="og:image" content="https://mixaverros88.github.io/WireMate/screenshots/projects.png" />
+  <meta property="og:site_name" content="WireMate" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="WireMate – Web UI & Dashboard for WireMock" />
+  <meta name="twitter:description" content="Free, open-source web UI for WireMock. Create, manage, and publish stubs visually — no handwritten JSON." />
+  <meta name="twitter:image" content="https://mixaverros88.github.io/WireMate/screenshots/projects.png" />
+
+  <!-- Structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "WireMate",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Cross-platform (Docker)",
+    "url": "https://mixaverros88.github.io/WireMate/",
+    "description": "WireMate is a free, open-source web UI and dashboard for WireMock. Create, manage, and publish WireMock stubs visually, organize mocks into projects, inspect request logs, and deploy with Docker.",
+    "image": "https://mixaverros88.github.io/WireMate/screenshots/projects.png",
+    "screenshot": [
+      "https://mixaverros88.github.io/WireMate/screenshots/projects.png",
+      "https://mixaverros88.github.io/WireMate/screenshots/mock-editor.png",
+      "https://mixaverros88.github.io/WireMate/screenshots/stubs.png",
+      "https://mixaverros88.github.io/WireMate/screenshots/logs.png"
+    ],
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "license": "https://github.com/mixaverros88/WireMate/blob/main/LICENSE",
+    "softwareHelp": "https://github.com/mixaverros88/WireMate#readme",
+    "downloadUrl": "https://github.com/mixaverros88/WireMate",
+    "author": {
+      "@type": "Person",
+      "name": "mixaverros88",
+      "url": "https://github.com/mixaverros88"
+    },
+    "keywords": "wiremock ui, wiremock dashboard, wiremock gui, api mocking, mock server, wiremock stubs, wiremock admin"
+  }
+  </script>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Logo animations */
+    .wire-draw {
+      stroke-dasharray: calc(var(--len) * 1px);
+      stroke-dashoffset: calc(var(--len) * 1px);
+      animation: draw 0.6s ease-out forwards;
+      animation-delay: var(--delay, 0s);
+    }
+    @keyframes draw {
+      to { stroke-dashoffset: 0; }
+    }
+    .node {
+      opacity: 0;
+      animation: pop 0.3s ease-out forwards;
+      animation-delay: var(--delay, 0s);
+    }
+    @keyframes pop {
+      0%   { opacity: 0; transform: scale(0); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    /* Smooth scrolling */
+    html { scroll-behavior: smooth; }
+
+    /* Feature card hover */
+    .feature-card {
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .feature-card:hover {
+      border-color: #047857;
+      transform: translateY(-4px);
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-[#0f1017] text-gray-400 overflow-x-hidden">
+
+  <!-- ═══ Nav ═══ -->
+  <nav class="fixed top-0 inset-x-0 z-50 backdrop-blur-xl bg-[#0f1017]/80 border-b border-gray-800">
+    <div class="max-w-[1100px] mx-auto flex items-center justify-between px-6 py-4">
+      <div class="flex items-center gap-2.5">
+        <svg width="57" height="36" viewBox="0 0 102 64" xmlns="http://www.w3.org/2000/svg">
+          <line x1="6" y1="32" x2="20" y2="32" stroke="#34d399" stroke-width="4.5" stroke-linecap="round" class="wire-draw" style="--len:14"/>
+          <circle cx="6" cy="32" r="6" fill="#34d399" class="node" style="--delay:0s"/>
+          <rect x="20" y="0" width="56" height="64" rx="11" fill="none" stroke="#34d399" stroke-width="3.5" class="wire-draw" style="--len:240;--delay:0.1s"/>
+          <circle cx="38" cy="32" r="8" fill="#34d399" opacity="0.2" class="node" style="--delay:0.3s"/>
+          <circle cx="38" cy="32" r="3.8" fill="#34d399" class="node" style="--delay:0.35s"/>
+          <rect x="76" y="13" width="26" height="10" rx="4.5" fill="#34d399" class="node" style="--delay:0.45s"/>
+          <rect x="76" y="41" width="26" height="10" rx="4.5" fill="#34d399" class="node" style="--delay:0.55s"/>
+        </svg>
+        <span class="text-xl font-semibold text-gray-100 tracking-tight">WireMate</span>
+      </div>
+      <div class="flex items-center gap-7">
+        <a href="#features" class="hidden md:inline text-sm text-gray-400 hover:text-gray-100 transition-colors">Features</a>
+        <a href="#screenshots" class="hidden md:inline text-sm text-gray-400 hover:text-gray-100 transition-colors">Screenshots</a>
+        <a href="#how-it-works" class="hidden md:inline text-sm text-gray-400 hover:text-gray-100 transition-colors">How it works</a>
+        <a href="https://github.com/mixaverros88/WireMate"
+           target="_blank"
+           class="px-4 py-2 rounded-lg bg-emerald-700 text-white text-sm font-medium hover:bg-emerald-500 transition-colors cursor-pointer">
+          GitHub
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══ Hero ═══ -->
+  <section class="relative max-w-[1100px] mx-auto pt-36 pb-20 px-6 grid md:grid-cols-2 gap-16 items-center">
+    <!-- glow -->
+    <div class="absolute top-16 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-[radial-gradient(ellipse,rgba(52,211,153,0.15)_0%,transparent_70%)] pointer-events-none"></div>
+
+    <div class="relative z-10">
+      <span class="inline-block px-3.5 py-1.5 rounded-full text-xs font-medium text-emerald-300 bg-emerald-500/10 border border-emerald-500/25 mb-6">
+        Open Source WireMock UI &amp; Dashboard
+      </span>
+      <h1 class="text-4xl md:text-[44px] font-bold leading-[1.15] tracking-tight text-gray-100 mb-4">
+        WireMate — the open-source<br />
+        <span class="bg-gradient-to-r from-emerald-300 via-teal-400 to-teal-500 bg-clip-text text-transparent">web UI for WireMock</span>
+      </h1>
+      <p class="text-xl font-semibold text-gray-200 mb-4">Mock APIs. Without the pain.</p>
+      <p class="text-lg leading-relaxed max-w-[460px] mb-8">
+        WireMate is a web UI and admin dashboard for your WireMock mock server —
+        create, manage, and publish WireMock stubs visually so your team can
+        build and test faster.
+      </p>
+      <div class="flex gap-3.5 flex-wrap">
+        <a href="https://github.com/mixaverros88/WireMate"
+           target="_blank"
+           class="inline-flex items-center px-7 py-3 rounded-xl text-base font-medium text-white bg-gradient-to-br from-emerald-700 to-emerald-400 shadow-[0_0_20px_rgba(52,211,153,0.3)] hover:shadow-[0_0_30px_rgba(52,211,153,0.5)] hover:-translate-y-0.5 transition-all cursor-pointer">
+          Get Started
+        </a>
+        <a href="#how-it-works"
+           class="inline-flex items-center px-7 py-3 rounded-xl text-base font-medium text-gray-100 bg-[#22232e] border border-gray-700 hover:border-emerald-500 hover:bg-[#1a1b23] transition-all">
+          See How It Works
+        </a>
+      </div>
+    </div>
+
+    <!-- code window -->
+    <div class="relative z-10">
+      <div class="bg-[#1a1b23] border border-gray-700/60 rounded-xl overflow-hidden shadow-2xl">
+        <div class="flex items-center justify-between px-4 pt-3.5">
+          <div class="flex gap-1.5">
+            <span class="w-2.5 h-2.5 rounded-full bg-red-500"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-yellow-500"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-green-500"></span>
+          </div>
+        </div>
+        <pre class="px-4 pb-4 pt-3 overflow-x-auto"><code id="curlCode" class="font-mono text-[13px] leading-relaxed text-gray-400">curl -X POST http://localhost:8080/__admin/mappings \
+  -H "Content-Type: application/json" \
+  -d '{
+    "request": {
+      "method": "GET",
+      "url": "/api/hello"
+    },
+    "response": {
+      "status": 200,
+      "jsonBody": { "message": "Hello from WireMock!" },
+      "headers": {
+        "Content-Type": "application/json"
+      }
+    }
+  }'</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ Features ═══ -->
+  <section id="features" class="max-w-[1100px] mx-auto py-20 px-6">
+    <div class="text-center mb-14">
+      <h2 class="text-4xl font-bold text-gray-100 tracking-tight mb-3">
+        WireMock stub management,<br />
+        <span class="bg-gradient-to-r from-emerald-300 via-teal-400 to-teal-500 bg-clip-text text-transparent">in a UI</span>
+      </h2>
+      <p class="text-[17px]">From stub creation to debugging, WireMate handles the full mock lifecycle.</p>
+    </div>
+    <div class="grid md:grid-cols-3 gap-5">
+      <div class="feature-card bg-[#1a1b23] border border-gray-700/60 rounded-2xl p-7">
+        <div class="flex items-center gap-3 mb-3">
+          <span class="text-3xl">⚡</span>
+          <h3 class="text-[17px] font-semibold text-gray-100">Visual Mock Builder</h3>
+        </div>
+        <p class="text-sm leading-relaxed">Create WireMock request/response mappings through an intuitive form. Methods, URLs, headers, JSON bodies, delays, and descriptions without handwritten JSON.</p>
+      </div>
+      <div class="feature-card bg-[#1a1b23] border border-gray-700/60 rounded-2xl p-7">
+        <div class="flex items-center gap-3 mb-3">
+          <span class="text-3xl">📂</span>
+          <h3 class="text-[17px] font-semibold text-gray-100">Project Management</h3>
+        </div>
+        <p class="text-sm leading-relaxed">Organize mocks into projects with search and filtering. Quickly find what you need across all your projects and mocks.</p>
+      </div>
+      <div class="feature-card bg-[#1a1b23] border border-gray-700/60 rounded-2xl p-7">
+        <div class="flex items-center gap-3 mb-3">
+          <span class="text-3xl">🔍</span>
+          <h3 class="text-[17px] font-semibold text-gray-100">WireMock Stubs Viewer</h3>
+        </div>
+        <p class="text-sm leading-relaxed">Browse all active stub mappings on your WireMock server. Filter by method, search by URL, and view response previews in real time.</p>
+      </div>
+      <div class="feature-card bg-[#1a1b23] border border-gray-700/60 rounded-2xl p-7">
+        <div class="flex items-center gap-3 mb-3">
+          <span class="text-3xl">📋</span>
+          <h3 class="text-[17px] font-semibold text-gray-100">Logs</h3>
+        </div>
+        <p class="text-sm leading-relaxed">Inspect every request WireMock receives. Matched and unmatched. Filter by method, URL, or status with multiple search modes.</p>
+      </div>
+      <div class="feature-card bg-[#1a1b23] border border-gray-700/60 rounded-2xl p-7">
+        <div class="flex items-center gap-3 mb-3">
+          <span class="text-3xl">🎛️</span>
+          <h3 class="text-[17px] font-semibold text-gray-100">Settings</h3>
+        </div>
+        <p class="text-sm leading-relaxed">Manage WireMock, set global response delays, monitor server health, and perform admin operations from a single dashboard.</p>
+      </div>
+      <div class="feature-card bg-[#1a1b23] border border-gray-700/60 rounded-2xl p-7">
+        <div class="flex items-center gap-3 mb-3">
+          <span class="text-3xl">🛠️</span>
+          <h3 class="text-[17px] font-semibold text-gray-100">Full CRUD Operations</h3>
+        </div>
+        <p class="text-sm leading-relaxed">Add, edit, and delete mocks or projects with ease. Keep your workspace clean and up to date.</p>
+      </div>
+      <div class="feature-card bg-[#1a1b23] border border-gray-700/60 rounded-2xl p-7">
+        <div class="flex items-center gap-3 mb-3">
+          <span class="text-3xl">📑</span>
+          <h3 class="text-[17px] font-semibold text-gray-100">Clone Mocks</h3>
+        </div>
+        <p class="text-sm leading-relaxed">Duplicate any mock in one click. Save time by reusing existing configurations as a starting point.</p>
+      </div>
+      <div class="feature-card bg-[#1a1b23] border border-gray-700/60 rounded-2xl p-7">
+        <div class="flex items-center gap-3 mb-3">
+          <span class="text-3xl">🔀</span>
+          <h3 class="text-[17px] font-semibold text-gray-100">Move Mocks Between Projects</h3>
+        </div>
+        <p class="text-sm leading-relaxed">Transfer mocks from one project to another. Reorganize your workspace as your needs evolve.</p>
+      </div>
+      <div class="feature-card bg-[#1a1b23] border border-gray-700/60 rounded-2xl p-7">
+        <div class="flex items-center gap-3 mb-3">
+          <span class="text-3xl">🔔</span>
+          <h3 class="text-[17px] font-semibold text-gray-100">Sync Delta Notifications</h3>
+        </div>
+        <p class="text-sm leading-relaxed">A background task detects differences between the database and WireMock. View all deltas on the notifications page.</p>
+      </div>
+      <div class="feature-card bg-[#1a1b23] border border-gray-700/60 rounded-2xl p-7">
+        <div class="flex items-center gap-3 mb-3">
+          <span class="text-3xl">🚀</span>
+          <h3 class="text-[17px] font-semibold text-gray-100">One-Click Publish</h3>
+        </div>
+        <p class="text-sm leading-relaxed">Push your stubs directly to any WireMock server. Go from draft to live mock in seconds with instant feedback.</p>
+      </div>
+      <div class="feature-card bg-[#1a1b23] border border-gray-700/60 rounded-2xl p-7">
+        <div class="flex items-center gap-3 mb-3">
+          <span class="text-3xl">🌓</span>
+          <h3 class="text-[17px] font-semibold text-gray-100">Dark &amp; Light Theme</h3>
+        </div>
+        <p class="text-sm leading-relaxed">Switch between dark and light modes with a single click. Every view adapts seamlessly to your preferred theme.</p>
+      </div>
+      <div class="feature-card bg-[#1a1b23] border border-gray-700/60 rounded-2xl p-7">
+        <div class="flex items-center gap-3 mb-3">
+          <span class="text-3xl">🗄️</span>
+          <h3 class="text-[17px] font-semibold text-gray-100">Persistent Storage</h3>
+        </div>
+        <p class="text-sm leading-relaxed">All mappings are persisted to PostgreSQL. Never lose a stub. Search, edit, and restore at will.</p>
+      </div>
+      <div class="feature-card bg-[#1a1b23] border border-gray-700/60 rounded-2xl p-7">
+        <div class="flex items-center gap-3 mb-3">
+          <span class="text-3xl">🐳</span>
+          <h3 class="text-[17px] font-semibold text-gray-100">Docker-Ready</h3>
+        </div>
+        <p class="text-sm leading-relaxed">Spin up the entire stack with Docker Compose. WireMock, PostgreSQL, and the UI. One command.</p>
+      </div>
+      <div class="feature-card bg-[#1a1b23] border border-gray-700/60 rounded-2xl p-7">
+        <div class="flex items-center gap-3 mb-3">
+          <span class="text-3xl">📤</span>
+          <h3 class="text-[17px] font-semibold text-gray-100">Export Mocks as JSON</h3>
+        </div>
+        <p class="text-sm leading-relaxed">Export a single mock or all mocks in a project as WireMock-compatible JSON. Download ready-to-use stub mappings for backup, sharing, or importing into another WireMock instance.</p>
+      </div>
+      <div class="feature-card bg-[#1a1b23] border border-gray-700/60 rounded-2xl p-7">
+        <div class="flex items-center gap-3 mb-3">
+          <span class="text-3xl">📥</span>
+          <h3 class="text-[17px] font-semibold text-gray-100">Import from Postman</h3>
+        </div>
+        <p class="text-sm leading-relaxed">Import a Postman Collection (v2.x) and automatically convert it into WireMock stubs. Headers, bodies, query params, and folder structures are preserved with sensible defaults.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ Screenshots ═══ -->
+  <section id="screenshots" class="max-w-[1100px] mx-auto py-20 px-6">
+    <div class="text-center mb-14">
+      <h2 class="text-4xl font-bold text-gray-100 tracking-tight mb-3">
+        The WireMock dashboard,<br />
+        <span class="bg-gradient-to-r from-emerald-300 via-teal-400 to-teal-500 bg-clip-text text-transparent">up close</span>
+      </h2>
+      <p class="text-[17px]">A tour of WireMate: projects, the mock editor, live stubs, logs, and settings.</p>
+    </div>
+    <div class="grid md:grid-cols-2 gap-6">
+      <figure class="bg-[#1a1b23] border border-gray-700/60 rounded-2xl overflow-hidden">
+        <img src="screenshots/projects.png"
+             alt="WireMate projects dashboard listing WireMock mock projects with search and filtering"
+             width="1955" height="905" loading="lazy" class="w-full h-auto" />
+        <figcaption class="px-5 py-4 text-sm">Projects dashboard — group WireMock stubs into named projects.</figcaption>
+      </figure>
+      <figure class="bg-[#1a1b23] border border-gray-700/60 rounded-2xl overflow-hidden">
+        <img src="screenshots/mock-editor.png"
+             alt="WireMate mock editor for WireMock request matching and response headers"
+             width="1942" height="908" loading="lazy" class="w-full h-auto" />
+        <figcaption class="px-5 py-4 text-sm">Mock editor — build request matching, response bodies, headers, and delays.</figcaption>
+      </figure>
+      <figure class="bg-[#1a1b23] border border-gray-700/60 rounded-2xl overflow-hidden">
+        <img src="screenshots/project-detail.png"
+             alt="WireMate project detail view showing the WireMock stubs saved in a project"
+             width="1943" height="904" loading="lazy" class="w-full h-auto" />
+        <figcaption class="px-5 py-4 text-sm">Project detail — every mock in a project, ready to edit, clone, or publish.</figcaption>
+      </figure>
+      <figure class="bg-[#1a1b23] border border-gray-700/60 rounded-2xl overflow-hidden">
+        <img src="screenshots/stubs.png"
+             alt="WireMate stubs viewer browsing live WireMock stub mappings by HTTP method and URL"
+             width="1940" height="914" loading="lazy" class="w-full h-auto" />
+        <figcaption class="px-5 py-4 text-sm">Stubs viewer — browse the live stub mappings on your WireMock server.</figcaption>
+      </figure>
+      <figure class="bg-[#1a1b23] border border-gray-700/60 rounded-2xl overflow-hidden">
+        <img src="screenshots/logs.png"
+             alt="WireMate logs screen searching the WireMock request journal for matched and unmatched requests"
+             width="1941" height="909" loading="lazy" class="w-full h-auto" />
+        <figcaption class="px-5 py-4 text-sm">Request logs — inspect matched and unmatched WireMock requests.</figcaption>
+      </figure>
+      <figure class="bg-[#1a1b23] border border-gray-700/60 rounded-2xl overflow-hidden">
+        <img src="screenshots/settings.png"
+             alt="WireMate settings page for WireMock server health, global response delays, and admin operations"
+             width="1939" height="909" loading="lazy" class="w-full h-auto" />
+        <figcaption class="px-5 py-4 text-sm">Settings — server health, global delays, and WireMock admin operations.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ═══ How it works ═══ -->
+  <section id="how-it-works" class="max-w-[1100px] mx-auto py-20 px-6">
+    <div class="text-center mb-14">
+      <h2 class="text-4xl font-bold text-gray-100 tracking-tight mb-3">How it works</h2>
+      <p class="text-[17px]">Four steps to mock nirvana.</p>
+    </div>
+    <div class="flex flex-col md:flex-row items-start gap-4 justify-center">
+      <div class="flex-1 max-w-[240px] text-center p-7">
+        <div class="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-gradient-to-br from-emerald-700 to-emerald-400 text-white text-lg font-bold mb-5">1</div>
+        <h3 class="text-lg font-semibold text-gray-100 mb-2">Create a project</h3>
+        <p class="text-sm leading-relaxed">Group your stubs by project. Stay organized from day one.</p>
+      </div>
+      <div class="text-emerald-400 text-2xl md:mt-10 self-center rotate-90 md:rotate-0">&rarr;</div>
+      <div class="flex-1 max-w-[240px] text-center p-7">
+        <div class="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-gradient-to-br from-emerald-700 to-emerald-400 text-white text-lg font-bold mb-5">2</div>
+        <h3 class="text-lg font-semibold text-gray-100 mb-2">Build your stubs</h3>
+        <p class="text-sm leading-relaxed">Use the ui to define requests, responses, delays, headers.</p>
+      </div>
+      <div class="text-emerald-400 text-2xl md:mt-10 self-center rotate-90 md:rotate-0">&rarr;</div>
+      <div class="flex-1 max-w-[240px] text-center p-7">
+        <div class="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-gradient-to-br from-emerald-700 to-emerald-400 text-white text-lg font-bold mb-5">3</div>
+        <h3 class="text-lg font-semibold text-gray-100 mb-2 whitespace-nowrap">Publish to WireMock</h3>
+        <p class="text-sm leading-relaxed">Publish your stubs to WireMock instantly. All stubs are persisted in the database.</p>
+      </div>
+      <div class="text-emerald-400 text-2xl md:mt-10 self-center rotate-90 md:rotate-0">&rarr;</div>
+      <div class="flex-1 max-w-[240px] text-center p-7">
+        <div class="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-gradient-to-br from-emerald-700 to-emerald-400 text-white text-lg font-bold mb-5">4</div>
+        <h3 class="text-lg font-semibold text-gray-100 mb-2">Monitor &amp; debug</h3>
+        <p class="text-sm leading-relaxed">Search through WireMock logs to inspect incoming requests and debug your stubs.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ CTA ═══ -->
+  <section class="relative text-center py-24 px-6">
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(52,211,153,0.1)_0%,transparent_60%)] pointer-events-none"></div>
+    <div class="relative z-10">
+      <h2 class="text-4xl font-bold text-gray-100 tracking-tight mb-2.5">Ready to simplify your mocks?</h2>
+      <p class="text-[17px] mb-7">Get WireMate running locally in under a minute.</p>
+      <div class="inline-block text-left bg-[#1a1b23] border border-gray-700/60 rounded-lg px-6 py-3 mb-7">
+<pre class="font-mono text-[15px] text-emerald-300 leading-relaxed"><code>git clone https://github.com/mixaverros88/WireMate.git
+cd WireMate
+docker compose up -d</code></pre>
+      </div>
+      <br />
+      <a href="https://github.com/mixaverros88/WireMate"
+         target="_blank"
+         class="inline-flex items-center px-9 py-3.5 rounded-xl text-[17px] font-medium text-white bg-gradient-to-br from-emerald-700 to-emerald-400 shadow-[0_0_20px_rgba(52,211,153,0.3)] hover:shadow-[0_0_30px_rgba(52,211,153,0.5)] hover:-translate-y-0.5 transition-all cursor-pointer">
+        View on GitHub
+      </a>
+    </div>
+  </section>
+
+  <!-- ═══ Footer ═══ -->
+  <footer class="border-t border-gray-800 py-8 px-6">
+    <div class="max-w-[1100px] mx-auto flex flex-col md:flex-row items-center justify-between gap-3">
+      <div class="flex items-center gap-2.5">
+        <svg width="57" height="36" viewBox="0 0 102 64" xmlns="http://www.w3.org/2000/svg">
+          <line x1="6" y1="32" x2="20" y2="32" stroke="#34d399" stroke-width="4.5" stroke-linecap="round"/>
+          <circle cx="6" cy="32" r="6" fill="#34d399"/>
+          <rect x="20" y="0" width="56" height="64" rx="11" fill="none" stroke="#34d399" stroke-width="3.5"/>
+          <circle cx="38" cy="32" r="8" fill="#34d399" opacity="0.2"/>
+          <circle cx="38" cy="32" r="3.8" fill="#34d399"/>
+          <rect x="76" y="13" width="26" height="10" rx="4.5" fill="#34d399"/>
+          <rect x="76" y="41" width="26" height="10" rx="4.5" fill="#34d399"/>
+        </svg>
+        <span class="text-xl font-semibold text-gray-100 tracking-tight">WireMate</span>
+      </div>
+      <p class="text-sm text-gray-500">Built for developers who'd rather ship than mock around.</p>
+    </div>
+  </footer>
+
+</body>
+</html>

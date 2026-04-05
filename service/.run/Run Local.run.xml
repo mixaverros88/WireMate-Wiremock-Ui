@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Run Local" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <module name="service" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.wire.mate.service.ServiceApplication" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
