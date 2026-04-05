@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mixaverros88.github.io/WireMate/sitemap.xml

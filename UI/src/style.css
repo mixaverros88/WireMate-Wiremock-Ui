@@ -1,0 +1,116 @@
+@import "tailwindcss";
+
+/* Make the dark-mode class on <html> control all descendants
+   (Tailwind v4 defaults to media-query dark mode otherwise). The newer
+   mgv-backoffice components (BaseInput, BaseSelect, BaseSegmentedControl,
+   BaseNotificationPanel, …) style dark mode with `dark:` variants and rely
+   on the consuming app mapping that variant to the `.dark` class that
+   useTheme() toggles on <html>.
+   This MUST be declared right after the Tailwind import and before any other
+   stylesheet @import: in the dev server (@tailwindcss/vite) a @custom-variant
+   placed after another @import is silently dropped, so dark: utilities fall
+   back to bare selectors and never react to the .dark class.
+   Use a specificity-bearing selector (:is, not :where) so dark: utilities also
+   win over plain base utilities like bg-white on a cascade tie — Tailwind v4
+   emits the dark:bg-* group before the bg-* group, so equal-specificity rules
+   would otherwise resolve in favor of the later (base) one. */
+@custom-variant dark (&:is(.dark, .dark *));
+
+@import "mgv-backoffice/dist/style.css";
+
+/* Pick up class names used inside the mgv-backoffice library so dark-mode
+   variants and dynamic colors survive the production purge. Tailwind v4
+   auto-detects sources in the project; node_modules is opt-in via @source. */
+@source "../node_modules/mgv-backoffice/dist";
+
+/*
+  Tailwind v4 changed the default `border-color` from `gray-200` to
+  `currentColor`. That meant every `border` utility without an explicit
+  `border-{color}` token rendered in the element's text colour — which
+  on a light surface is near-black, on a dark surface is near-white.
+  Most of the app already supplies an explicit border colour via the
+  theme composable, but a few bare `border` utilities remain (badges
+  whose colour-bearing class is conditional, dividers around stat
+  cards, etc.) and were rendering as solid black on light mode.
+
+  This rule restores v3's default by setting a sensible base
+  border-color on every element (and pseudo). Anything that explicitly
+  sets `border-{color}` overrides it, so this is invisible to all the
+  styled cases.
+
+  Reference: Tailwind v4 upgrade guide,
+  "Default border color has changed to currentColor".
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+}
+
+/*
+  Give native <select> elements breathing room for the native chevron.
+  The rule is wrapped in @layer base and uses :where(), which gives it
+  specificity 0 — any class-scoped rule from mgv-backoffice (or elsewhere)
+  wins, so the padding can't bleed into third-party component selects that
+  already size themselves precisely. App-owned <select>s, which have no
+  conflicting rule, still get the chevron clearance.
+*/
+@layer base {
+  :where(select) {
+    padding-right: 2rem;
+  }
+
+  /*
+    Make every clickable thing show the hand cursor by default. Covers
+    native <button>, ARIA role="button", anchors, <summary>, form labels,
+    clickable inputs (submit/button/reset/checkbox/radio), and — via the
+    SVG selector — any icon nested inside one of those. Icons get
+    `pointer-events: none` so clicks pass through to the parent button,
+    which keeps click targets (and hover states) on the actual control
+    rather than the decoration.
+
+    Disabled controls opt out explicitly so users get the correct affordance.
+  */
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  a[href],
+  summary,
+  label[for],
+  input[type="submit"]:not(:disabled),
+  input[type="button"]:not(:disabled),
+  input[type="reset"]:not(:disabled),
+  input[type="checkbox"]:not(:disabled),
+  input[type="radio"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  button:disabled,
+  [role="button"][aria-disabled="true"],
+  input:disabled {
+    cursor: not-allowed;
+  }
+
+  /*
+    Icons inside clickable elements shouldn't swallow the click or change
+    the cursor — let the parent decide both.
+  */
+  button svg,
+  [role="button"] svg,
+  a svg,
+  summary svg,
+  label svg {
+    pointer-events: none;
+  }
+}
+
+/*
+  (Removed) The dark-mode workaround for mgv-backoffice dialogs that
+  used to live here is no longer needed: since lib v1.34.0
+  `useThemeClasses()` returns a reactive object of plain strings, so
+  `:class="t.primaryText"` bindings resolve correctly and modals get
+  their real theme classes instead of leaked ref internals.
+*/

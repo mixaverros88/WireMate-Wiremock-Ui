@@ -1,0 +1,6 @@
+/* Tailwind source for the landing page.
+   Rebuild after editing index.html (tailwindcss must be installed so the
+   import below resolves — e.g. npm i -D tailwindcss @tailwindcss/cli):
+   npx @tailwindcss/cli -i docs/tailwind.input.css -o docs/style.css --minify */
+@import "tailwindcss";
+@source "./index.html";

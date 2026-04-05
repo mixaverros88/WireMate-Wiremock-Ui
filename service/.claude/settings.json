@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|Create",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/scripts/generate-postman.sh \"$CLAUDE_TOOL_INPUT_PATH\""
+          }
+        ]
+      }
+    ]
+  }
+}

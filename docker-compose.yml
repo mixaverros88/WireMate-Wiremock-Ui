@@ -1,0 +1,83 @@
+services:
+
+  postgres:
+    image: ${POSTGRES_IMAGE}
+    container_name: wiremate-postgres
+    restart: unless-stopped
+    ports:
+      - "${DB_PORT}:5432"
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - ${DATA_PATH}\postgress:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - wiremate-network
+
+  wiremock:
+    image: ${WIREMOCK_IMAGE}
+    container_name: wiremate-wiremock
+    restart: unless-stopped
+    ports:
+      - "${WIREMOCK_PORT}:8080"
+    volumes:
+      - ${DATA_PATH}\wiremock\mappings:/home/wiremock/mappings
+      - ${DATA_PATH}\wiremate\wiremock\__files:/home/wiremock/__files
+    command: --verbose --enable-stub-cors
+    networks:
+      - wiremate-network
+
+  backend:
+    image: ${BACKEND_IMAGE}
+    container_name: wiremate-backend
+    restart: unless-stopped
+    ports:
+      - "${BACKEND_PORT}:8081"
+      - "8002:8000"
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      SERVER_PORT: 8081
+      # Always use WireMock's internal container port (8080), not the
+      # host-mapped ${WIREMOCK_PORT}. Inside this Docker network the
+      # wiremock service listens on 8080 regardless of how the port
+      # is published to the host.
+      APP_WIREMOCK_BASE_URL: "http://wiremock:8080"
+      APP_WIREMOCK_MAIN_PATH: ${APP_WIREMOCK_MAIN_PATH}
+      APP_CROSS_CHECK_INTERVAL: ${APP_CROSS_CHECK_INTERVAL}
+      APP_CROSS_CHECK_ENABLED: ${APP_CROSS_CHECK_ENABLED}
+      APP_CORS_ORIGINS: ${APP_CORS_ORIGINS}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - wiremate-network
+
+  ui:
+    image: ${UI_IMAGE}
+    container_name: wiremate-ui
+    restart: unless-stopped
+    ports:
+      - "${UI_PORT}:80"
+    depends_on:
+      - backend
+    networks:
+      - wiremate-network
+    environment:
+      NGINX_ENVSUBST_OUTPUT_DIR: /usr/share/nginx/html
+      UI_WIREMOCK_ADMIN_URL: ${UI_WIREMOCK_URL}
+      API_BASE_URL: ${UI_WIREMATE_BASE_URL}
+    volumes:
+      - ./config.js.template:/etc/nginx/templates/config.js.template:ro
+
+networks:
+  wiremate-network:
