@@ -15,13 +15,14 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "postinstall": "patch-package"
+    "postinstall": "patch-package",
+    "prebuild": "mgv-check-date-inputs"
   },
   "dependencies": {
     "@heroicons/vue": "^2.2.0",
     "@tailwindcss/vite": "^4.3.3",
     "chart.js": "^4.5.1",
-    "mgv-backoffice": "^1.37.0",
+    "mgv-backoffice": "^1.50.0",
     "tailwindcss": "^4.3.3",
     "vue": "^3.5.43",
     "vue-chartjs": "^5.3.4",
